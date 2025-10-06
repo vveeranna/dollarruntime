@@ -1,0 +1,6 @@
+# Datadog APM with Exception Replay
+ddtrace==1.19.0
+datadog==0.47.0
+
+# Environment Configuration
+python-dotenv==1.0.0
