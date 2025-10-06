@@ -1,5 +1,5 @@
-# Datadog APM with Exception Replay
-ddtrace==1.19.0
+# Datadog APM with Exception Replay (requires >= 1.10.0 for exception replay)
+ddtrace>=2.0.0
 datadog==0.47.0
 
 # Environment Configuration

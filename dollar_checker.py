@@ -15,28 +15,35 @@ load_dotenv()
 from ddtrace import tracer, patch_all, config
 import datadog
 
-# Enable exception replay and profiling
-config.exception_replay.enabled = True
-
-# Patch all supported libraries
+# Patch all supported libraries FIRST
 patch_all()
 
 # Initialize Datadog
 DD_TRACE_ENABLED = os.environ.get('DD_TRACE_ENABLED', 'true').lower() == 'true'
 
 if DD_TRACE_ENABLED:
+    # Configure tracer with exception debugging enabled
     tracer.configure(
         hostname=os.environ.get('DD_AGENT_HOST', 'localhost'),
         port=int(os.environ.get('DD_AGENT_PORT', 8126)),
     )
+    
+    # Enable exception replay (requires ddtrace >= 1.10.0)
+    try:
+        from ddtrace.debugging import DynamicInstrumentation
+        config.exception_replay.enabled = True
+        config.dynamic_instrumentation.enabled = True
+        print("✓ Exception Replay enabled")
+    except (ImportError, AttributeError):
+        print("⚠ Exception Replay not available (requires ddtrace >= 1.10.0)")
+        print("  Install with: pip install --upgrade ddtrace")
     
     datadog.initialize(
         api_key=os.environ.get('DD_API_KEY'),
         app_key=os.environ.get('DD_APP_KEY'),
     )
     
-    print("✓ Datadog APM initialized")
-    print("✓ Exception Replay enabled\n")
+    print("✓ Datadog APM initialized\n")
 
 @tracer.wrap(service='dollar-checker', resource='check_for_dollar')
 def check_for_dollar(text):
