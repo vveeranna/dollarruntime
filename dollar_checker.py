@@ -23,10 +23,10 @@ DD_TRACE_ENABLED = os.environ.get('DD_TRACE_ENABLED', 'true').lower() == 'true'
 
 if DD_TRACE_ENABLED:
     # Configure tracer with exception debugging enabled
-    tracer.configure(
-        hostname=os.environ.get('DD_AGENT_HOST', 'localhost'),
-        port=int(os.environ.get('DD_AGENT_PORT', 8126)),
-    )
+    # Note: Use DD_AGENT_HOST and DD_TRACE_AGENT_PORT environment variables
+    # instead of tracer.configure() parameters in newer ddtrace versions
+    agent_url = f"http://{os.environ.get('DD_AGENT_HOST', 'localhost')}:{os.environ.get('DD_TRACE_AGENT_PORT', '8126')}"
+    os.environ.setdefault('DD_TRACE_AGENT_URL', agent_url)
     
     # Enable exception replay (requires ddtrace >= 1.10.0)
     try:
