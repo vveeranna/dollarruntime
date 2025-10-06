@@ -37,7 +37,8 @@ client_loop: send disconnect: Broken pipe
 vijay.veeranna@COMP-L26HFG6X1M keys % 
 
 
+Here are some sample images from DD lab
+
 ![Diagram](https://raw.githubusercontent.com/vveeranna/dollarruntime/main/images/screengrabone.png)
 
-![Diagram1](https://raw.githubusercontent.com/vveeranna/dollarruntime/main/images/screengrabone.png)
 
