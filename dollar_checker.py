@@ -28,15 +28,22 @@ if DD_TRACE_ENABLED:
     agent_url = f"http://{os.environ.get('DD_AGENT_HOST', 'localhost')}:{os.environ.get('DD_TRACE_AGENT_PORT', '8126')}"
     os.environ.setdefault('DD_TRACE_AGENT_URL', agent_url)
     
-    # Enable exception replay (requires ddtrace >= 1.10.0)
+    # Try to enable exception replay (optional feature)
+    # Note: This requires Datadog Agent with debugger support
+    # If not available, the app will still work with custom tags
     try:
         from ddtrace.debugging import DynamicInstrumentation
-        config.exception_replay.enabled = True
-        config.dynamic_instrumentation.enabled = True
-        print("✓ Exception Replay enabled")
-    except (ImportError, AttributeError):
-        print("⚠ Exception Replay not available (requires ddtrace >= 1.10.0)")
-        print("  Install with: pip install --upgrade ddtrace")
+        # Only enable if explicitly requested
+        if os.environ.get('DD_EXCEPTION_REPLAY_ENABLED', 'false').lower() == 'true':
+            config.exception_replay.enabled = True
+            config.dynamic_instrumentation.enabled = True
+            print("✓ Exception Replay enabled (experimental)")
+        else:
+            print("ℹ Exception Replay disabled (use DD_EXCEPTION_REPLAY_ENABLED=true to enable)")
+            print("  Note: Requires Datadog Agent >= 7.44 with debugger support")
+    except (ImportError, AttributeError) as e:
+        print("ℹ Exception Replay not available (optional feature)")
+        print(f"  Reason: {e}")
     
     datadog.initialize(
         api_key=os.environ.get('DD_API_KEY'),
