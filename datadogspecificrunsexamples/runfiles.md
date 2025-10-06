@@ -1,0 +1,42 @@
+DD Specific run Usa cases
+e.g: 
+[ec2-user@ip-172-31-21-188 dollarruntime]$ DD_PROFILING_ENABLED=true DD_EXCEPTION_REPLAY_ENABLED=true DD_SERVICE=dollargeneral DD_ENV=prod ddtrace-run  python3 dollar_checker.py "hello $"
+ℹ Exception Replay not available (optional feature)
+  Reason: <class 'ddtrace.settings._config.Config'> object has no attribute exception_replay, exception_replay is not a valid configuration
+✓ Datadog APM initialized
+
+======================================================================
+Dollar Sign Checker with Datadog APM Exception Replay
+======================================================================
+
+🔍 Checking text: 'hello $'
+
+❌ DOLLAR SIGN DETECTED at position 6!
+   Character: '$'
+   Position: 6
+   Context: ...ello $...
+
+💥 Throwing unhandled RuntimeError exception...
+
+Traceback (most recent call last):
+  File "/home/ec2-user/nov/exdollar/dollarruntime/dollar_checker.py", line 176, in <module>
+    exit_code = main()
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/ddtrace/_trace/tracer.py", line 859, in func_wrapper
+    return f(*args, **kwargs)
+  File "/home/ec2-user/nov/exdollar/dollarruntime/dollar_checker.py", line 164, in main
+    check_for_dollar(text)
+  File "/home/ec2-user/.local/lib/python3.9/site-packages/ddtrace/_trace/tracer.py", line 859, in func_wrapper
+    return f(*args, **kwargs)
+  File "/home/ec2-user/nov/exdollar/dollarruntime/dollar_checker.py", line 114, in check_for_dollar
+    raise RuntimeError(f"Dollar sign ($) detected at position {i} in text: '{text}'")
+RuntimeError: Dollar sign ($) detected at position 6 in text: 'hello $'
+2025-10-06 06:56:28,428 ERROR [ddtrace.debugging._uploader] [_uploader.py:154] [dd.service=dollargeneral dd.env=prod dd.version= dd.trace_id=0 dd.span_id=0] - Failed to upload payload to endpoint /debugger/v2/input?ddtags=env%3Aprod%2Cdebugger_version%3A3.15.0%2C_dd.injection.mode%3Ahost: [404] b'404 page not found\n'
+[ec2-user@ip-172-31-21-188 dollarruntime]$ Connection to ec2-16-52-145-63.ca-central-1.compute.amazonaws.com closed by remote host.
+Connection to ec2-16-52-145-63.ca-central-1.compute.amazonaws.com closed.
+client_loop: send disconnect: Broken pipe
+vijay.veeranna@COMP-L26HFG6X1M keys % 
+
+
+![Diagram](https://raw.githubusercontent.com/vveeranna/dollarruntime/main/images/screengrabone.png)
+
+![Diagram1](https://raw.githubusercontent.com/vveeranna/dollarruntime/main/images/screengrabone.png)
